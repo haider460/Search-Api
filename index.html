@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Movie</title>
+    <!--  import styles -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body onload="CheckHistory()">
+    <div class="main-container">
+      <form>
+        <label for="search-input">Search Movie</label>
+        <div class="input-container">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Enter movie name"
+            name="search-input"
+          />
+          <button id="clear-input" type="button">&times;</button>
+        </div>
+      </form>
+      <!--  suggeted movies name in the dropdown-->
+      <span class="result-container">
+        <ul id="autocomplete-results"></ul>
+      </span>
+      <div class="history-header">
+        <h2>Search history</h2>
+        <button id="clear-results">Clear Results</button>
+      </div>
+      <!--  display the search history here -->
+      <ul id="selected-results"></ul>
+    </div>
+    <!--  import js scripts -->
+    <script src="script.js"></script>
+  </body>
+</html>
