@@ -38,6 +38,21 @@ function debounce(func, wait) {
   };
 }
 
+//  get time
+const getTime = () => {
+  //  convert the the time to our requirements
+  let timestamp = new Date().toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+  timestamp = timestamp.replace(/\//g, "-");
+  return timestamp;
+};
+
 //  display and store the data whci we fetch form the api and
 // also handle the " not found data" and "min character required"
 function displaySearchResults(results, query) {
@@ -97,7 +112,6 @@ function displaySearchResults(results, query) {
       // handle the search history. store it and diplay on the screen with time and date
       li.addEventListener("click", () => {
         const historyDiv = document.getElementsByClassName("no-history")[0];
-
         historyDiv?.remove();
 
         const selectedLi = document.createElement("li");
@@ -105,15 +119,7 @@ function displaySearchResults(results, query) {
         const deleteButton = document.createElement("button");
 
         //  convert the the time to our requirements
-        let timestamp = new Date().toLocaleString("en-US", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        });
-        timestamp = timestamp.replace(/\//g, "-");
+        let timestamp = getTime();
 
         //  add the classes to the html tags and asign the data into it
         selectedLi.classList.add("selected-item");
@@ -139,6 +145,43 @@ function displaySearchResults(results, query) {
     }
   }
 }
+
+// save the  history on enter button
+
+searchInput.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    const inputValue = searchInput.value;
+    console.log(inputValue?.length);
+    if (inputValue.length > 2) {
+      const historyDiv = document.getElementsByClassName("no-history")[0];
+      historyDiv?.remove();
+      const selectedLi = document.createElement("li");
+      const selectedDiv = document.createElement("div");
+      const deleteButton = document.createElement("button");
+      //  get time
+      const timestamp = getTime();
+      //  add the classes to the html tags and asign the data into it
+      selectedLi.classList.add("selected-item");
+      selectedDiv.classList.add("selected-item-details");
+      deleteButton.classList.add("clear-single-history");
+      selectedLi.textContent = inputValue;
+      selectedDiv.textContent = timestamp;
+      deleteButton.innerHTML = "&#10006;";
+      deleteButton.addEventListener("click", () => {
+        selectedLi.remove();
+        CheckHistory();
+      });
+      selectedDiv.appendChild(deleteButton);
+      selectedLi.appendChild(selectedDiv);
+      selectedResults.appendChild(selectedLi);
+      searchHistory.push({ inputValue, timestamp });
+      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+      autocompleteResults.innerHTML = "";
+      searchInput.value = "";
+    }
+  }
+});
 
 //  handle the search functionality
 function search(event) {
